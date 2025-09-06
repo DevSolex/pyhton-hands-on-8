@@ -19,12 +19,13 @@ class BankAccount:
             elif self.message == 'Email':
                 print(f'Email: Dear {self.account_name} Your account number is {self.account_number} and your balance is {self.balance}.')
 
-    def freeze(self, account_name):
+    def freeze(self, target_account):
         if self.isadmin == True:
-            self.isfreeze = True
-            print(f'Dear {account_name} your account is frozen')
+            if target_account.account_name != self.account_name:
+                target_account.isfreeze = True
+                print(f'Dear {target_account.account_name} your account is frozen')
         else:
-            print(f'You are not an admin to freeze {account_name} account')
+            print(f'You are not an admin to freeze {target_account.account_name} account')
 
 
 
@@ -81,6 +82,6 @@ class BankAccount:
 
 acc = BankAccount('solex', 1000, True, True, 'SMS')
 solex = BankAccount('solo', 1900, True, False, 'Email')
-acc.freeze('solo')
+acc.freeze(solex)
 solex.deposit(1000)
 
