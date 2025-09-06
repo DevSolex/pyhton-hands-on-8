@@ -32,7 +32,7 @@ class BankAccount:
 
     def deposit(self, amount):
         if self.isfreeze:
-            print("Can't deposit your Account is been frozen")
+            print(f"Dear {self.account_name} you can't deposit your Account is been frozen")
         else:
             self.balance += amount
             if self.message == 'SMS':
@@ -45,7 +45,7 @@ class BankAccount:
 
     def withdraw(self, amount):
         if self.isfreeze:
-            return "Can't withdraw your Account is been frozen"
+            return f"Dear {self.account_name} you can't withdraw your Account is been frozen"
         else:
             if amount <= self.balance:
                 self.balance -= amount
@@ -61,8 +61,8 @@ class BankAccount:
 
 
     def transfer(self, reciver, amount_to_send):
-        if self.freeze:
-            print("Can't make transfer your Account is been frozen")
+        if self.isfreeze:
+            print(f"Dear {self.account_name} you can't make transfer your Account is been frozen")
         else:
             if amount_to_send <= self.balance:
                 tx = self.withdraw(amount_to_send)
