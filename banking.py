@@ -68,10 +68,7 @@ class BankAccount:
                 tx = self.withdraw(amount_to_send)
                 if tx == 'successful':
                     reciver.deposit(amount_to_send)
-                    if self.message == 'SMS':
-                        print(f'SMS: Dear {self.account_name} Your account has been debited with {amount_to_send} to {reciver.account_name}. Your new balance is {self.balance}.')
-                    elif self.message == 'Email':
-                        print(f'Email: Dear {self.account_name} Your account has been debited with {amount_to_send} to {reciver.account_name}. Your new balance is {self.balance}.')
+                    print(f'Transferred of {amount_to_send} to {reciver.account_name} successfully')
                 else:
                     return 'Transfer failed'
             else:
@@ -82,6 +79,10 @@ class BankAccount:
 
 acc = BankAccount('solex', 1000, True, True, 'SMS')
 solex = BankAccount('solo', 1900, True, False, 'Email')
+bankat = BankAccount('bankat', 2000, False, False, 'SMS')
 acc.freeze(solex)
 solex.deposit(1000)
-
+bankat.freeze(acc)
+print(bankat.balance)
+bankat.withdraw(5000)
+acc.transfer(bankat, 500)
