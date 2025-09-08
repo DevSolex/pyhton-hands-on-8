@@ -10,6 +10,7 @@ class BankAccount:
         self.isadmin = isadmin
         self.message = message
         self.isfreeze = False
+        self.unfreeze = False
 
         if self.ispromo == True:
             self.balance += self.promo_price
@@ -27,6 +28,13 @@ class BankAccount:
         else:
             print(f'You are not an admin to freeze {target_account.account_name} account')
 
+    def notfreeze(self, target_account):
+        if self.isadmin == True:
+            if target_account.account_name == self.freeze:
+                target_account.isfreeze = False
+                print(f'Dear {target_account.account_name} your account has been unfreeze.')
+        else:
+            print(f"you are not an admin to unfreeze {target_account.account_name} account.")
 
 
 
@@ -81,6 +89,8 @@ acc = BankAccount('solex', 1000, True, True, 'SMS')
 solex = BankAccount('solo', 1900, True, False, 'Email')
 bankat = BankAccount('bankat', 2000, False, False, 'SMS')
 acc.freeze(solex)
+solex.deposit(1000)
+acc.notfreeze(solex)
 solex.deposit(1000)
 bankat.freeze(acc)
 print(bankat.balance)
