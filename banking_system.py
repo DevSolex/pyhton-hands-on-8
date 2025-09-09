@@ -1,6 +1,6 @@
 import random
 class BankAccount:
-    def __init__(self, account_name, balance=0, ispromo=False, isadmin=False, message='SMS'):
+    def __init__(self, account_name:str, balance:float=0, ispromo:bool=False, isadmin:bool=False, message: str ='SMS'): 
 
         self.account_name = account_name
         self.account_number = random.randint(000000000, 999999999)
@@ -10,7 +10,7 @@ class BankAccount:
         self.isadmin = isadmin
         self.message = message
         self.isfreeze = False
-        self.unfreeze = False
+        
 
         if self.ispromo == True:
             self.balance += self.promo_price
@@ -20,7 +20,7 @@ class BankAccount:
             elif self.message == 'Email':
                 print(f'Email: Dear {self.account_name} Your account number is {self.account_number} and your balance is {self.balance}.')
 
-    def freeze(self, target_account):
+    def freeze(self, target_account: 'BankAccount'):
         if self.isadmin == True:
             if target_account.account_name != self.account_name:
                 target_account.isfreeze = True
@@ -28,7 +28,7 @@ class BankAccount:
         else:
             print(f'You are not an admin to freeze {target_account.account_name} account')
 
-    def notfreeze(self, target_account):
+    def unfreeze(self, target_account: 'BankAccount'):
         if self.isadmin == True:
             if target_account.account_name == self.freeze:
                 target_account.isfreeze = False
@@ -38,7 +38,7 @@ class BankAccount:
 
 
 
-    def deposit(self, amount):
+    def deposit(self, amount: float):
         if self.isfreeze:
             print(f"Dear {self.account_name} you can't deposit your Account is been frozen")
         else:
@@ -51,48 +51,37 @@ class BankAccount:
 
 
 
-    def withdraw(self, amount):
-        if self.isfreeze:
+    def withdraw(self, amount: float):
+        if self.isfreeze == True:
             return f"Dear {self.account_name} you can't withdraw your Account is been frozen"
+        
+        if amount <= self.balance:
+            self.balance -= amount
+            if self.message == 'SMS':
+                print(f'SMS: Dear {self.account_name} Your account has been debited with {amount}. Your new balance is {self.balance}.')
+            elif self.message == 'Email':
+                print(f'Email: Dear {self.account_name} Your account has been debited with {amount}. Your new balance is {self.balance}.')
+            return 'successful'
         else:
-            if amount <= self.balance:
-                self.balance -= amount
-                if self.message == 'SMS':
-                    print(f'SMS: Dear {self.account_name} Your account has been debited with {amount}. Your new balance is {self.balance}.')
-                elif self.message == 'Email':
-                    print(f'Email: Dear {self.account_name} Your account has been debited with {amount}. Your new balance is {self.balance}.')
-                return 'successful'
-            else:
-                print('Insufficient balance')
+            print('Insufficient balance')
 
 
 
 
-    def transfer(self, reciver, amount_to_send):
-        if self.isfreeze:
+    def transfer(self, reciver: 'BankAccount', amount_to_send: float):
+        if self.isfreeze == True:
             print(f"Dear {self.account_name} you can't make transfer your Account is been frozen")
-        else:
-            if amount_to_send <= self.balance:
-                tx = self.withdraw(amount_to_send)
-                if tx == 'successful':
-                    reciver.deposit(amount_to_send)
-                    print(f'Transferred of {amount_to_send} to {reciver.account_name} successfully')
-                else:
-                    return 'Transfer failed'
+
+        if amount_to_send <= self.balance:
+            tx = self.withdraw(amount_to_send)
+            if tx == 'successful':
+                reciver.deposit(amount_to_send)
+                print(f'Transferred of {amount_to_send} to {reciver.account_name} successfully')
             else:
-                return 'Insufficient balance'
+                return 'Transfer failed'
+        else:
+            return 'Insufficient balance'
 
 
 
 
-acc = BankAccount('solex', 1000, True, True, 'SMS')
-solex = BankAccount('solo', 1900, True, False, 'Email')
-bankat = BankAccount('bankat', 2000, False, False, 'SMS')
-acc.freeze(solex)
-solex.deposit(1000)
-acc.notfreeze(solex)
-solex.deposit(1000)
-bankat.freeze(acc)
-print(bankat.balance)
-bankat.withdraw(5000)
-acc.transfer(bankat, 500)
